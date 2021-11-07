@@ -14,7 +14,7 @@ This kind of function were proposed by Dan Boneh et. al. on [1].
 ## Chia VDF
 Based on Wesolowski's proposal, has the following main algorithms:
 
-- **Create Discriminant** (`create_discriminant`): This functions receives two inputs, a *challenge* and the *size* of discriminant to be created. After some computation, returns a valid __negative__ discriminant.
+- **Create Discriminant** (`create_discriminant`): This function receives two inputs, a *challenge* and the *size* of discriminant to be created. After some computation, returns a valid __negative__ discriminant.
     - But, what does this function exactly? Internally it calls another function named `HashPrime`, which one receives the *challenge* as a *seed*, *size* as a *length*, and also another parameter more named *bitmask*, which is always the vector `{0,1,2, length-1}`. 
     - `HashPrime` generates a random psuedoprime using the hash and check method:
         - Randomly chooses x with bit-length *length*, then applies a mask
