@@ -29,7 +29,7 @@ Based on Wesolowski's proposal, has the following main algorithms:
 
 - [2] B. Wesolowski, «[Efficient Verifiable Delay Functions](https://eprint.iacr.org/2018/623.pdf)» EUROCRYPT, 2019.
 
-- [3] K. Pietrzak, «[Simple Verifiable Delay Functions]https://eprint.iacr.org/2018/627.pdf)» de ITCS, 2019.(
+- [3] K. Pietrzak, «[Simple Verifiable Delay Functions](https://eprint.iacr.org/2018/627.pdf)» de ITCS, 2019.(
 
 - [4] L. D. Feo, S. Masson, C. Petit, A. Sanso «[Verifiable Delay Functions from Supersingular Isogenies and 
 Pairings](https://eprint.iacr.org/2019/166.pdf)» ASIACRYPT, 2019.
