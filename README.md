@@ -9,6 +9,8 @@ A VDF takes time `T` in being evaluated, even with multiprocesing. The result is
 
 - __Verify (pp,x,y,π) → {Yes, No}__: Has the job of verify efficiently the result, returning *Yes* if *y* is the result of passing *x* as input to prove, with the same public parameters. Otherwise returns *No*.
 
+This kind of function were proposed by Dan Boneh et. al. on (1).
+
 ## Chia VDF
 Based on Wesoloski's proposal, has the following main algorithms:
 
@@ -22,3 +24,21 @@ Based on Wesoloski's proposal, has the following main algorithms:
 
 - **Prove** (`prove`):
 
+## References
+- [1] [D. Boneh, J. Bonneau, B. Bünz, B. Fisch, «Verifiable Delay Functions» 2018.](https://eprint.iacr.org/2018/601.pdf)
+
+- [2] [B. Wesolowski, «Efficient Verifiable Delay Functions» EUROCRYPT, 2019.](https://eprint.iacr.org/2018/623.pdf)
+
+- [3] [K. Pietrzak, «Simple Verifiable Delay Functions» de ITCS, 2019.](https://eprint.iacr.org/2018/627.pdf)
+
+- [4] [S. M. C. P. a. A. S. L. D. Feo, «Verifiable Delay Functions from Supersingular Isogenies and 
+Pairings» ASIACRYPT, 2019.](https://eprint.iacr.org/2019/166.pdf)
+
+- [5] [D. Boneh, B. Bünz, B. Fisch, «A Survey of Two Verifiable Delay Functions» 2018.](https://eprint.iacr.org/2018/712.pdf)
+
+- [6] [L. Long, «Binary Quadratic Forms» Chia VDF Competition Guide, 2019.](https://raw.githubusercontent.com/Chia-Network/chiavdf/main/classgroups.pdf)
+
+
+Also linked the Official [Chia VDF](https://github.com/Chia-Network/chiavdf) repository on GitHub.
+
+Additional information on [VDF Research page](https://vdfresearch.org/).
