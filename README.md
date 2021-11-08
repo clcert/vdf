@@ -9,7 +9,7 @@ A VDF takes time `T` in being evaluated, even with multiprocesing. The result is
 
 - __Verify (pp,x,y,π) → {Yes, No}__: Has the job of verify efficiently the result, returning *Yes* if *y* is the result of passing *x* as input to prove, with the same public parameters. Otherwise returns *No*.
 
-This kind of function were proposed by Dan Boneh et. al. on [1].
+This kind of function were proposed by Dan Boneh et. al. on [1](#References).
 
 ## Chia VDF
 Based on Wesolowski's proposal, has the following main algorithms:
@@ -23,6 +23,23 @@ Based on Wesolowski's proposal, has the following main algorithms:
     - Note that `HashPrime` returns a positive number, so it is mutiplied by *-1*.
 
 - **Prove** (`prove`):
+
+## Time Exec
+On script `test.py` we variate the size of discriminant (λ) in range `[256, 512, 1024]`, meanwhile we also veriante the number of squarings (T) in range `[500k, 1000k, 1500k, ..., 5000k]`. For every pair, the experiment is repeated 10 times, in order to ensure a robust result.
+
+The results are the following.
+
+### Prover
+In prover side, the function that produces the output of the VDF takes linear increasement as we see in the following graphic. We also include the standard desviation to provide more information of the behavior.
+![Prover Time Graphic](images/prover_time.png)
+If we do a linear regression of each line, we obtain that:
+- `λ=256` *t = 7E-06T + 0.0574*
+- `λ=512` *t = 1E-05t - 0.0924*
+- `λ=1024` *t = 2E-05T + 1.5936*
+
+### Verifier
+We also do the same for verification time.
+![Verifier Time Graphic](images/verifier_time.png)
 
 ## References
 - [1] D. Boneh, J. Bonneau, B. Bünz, B. Fisch, «[Verifiable Delay Functions](https://eprint.iacr.org/2018/601.pdf)» 2018.
