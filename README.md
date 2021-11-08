@@ -9,7 +9,7 @@ A VDF takes time `T` in being evaluated, even with multiprocesing. The result is
 
 - __Verify (pp,x,y,π) → {Yes, No}__: Has the job of verify efficiently the result, returning *Yes* if *y* is the result of passing *x* as input to prove, with the same public parameters. Otherwise returns *No*.
 
-This kind of function were proposed by Dan Boneh et. al. on [1].
+This kind of function were proposed by Dan Boneh et. al. on [1](#References).
 
 ## Chia VDF
 Based on Wesolowski's proposal, has the following main algorithms:
