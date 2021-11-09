@@ -9,4 +9,4 @@ A VDF takes time `T` in being evaluated, even with multiprocesing. The result is
 
 - __Verify (pp,x,y,π) → {Yes, No}__: Has the job of verify efficiently the result, returning *Yes* if *y* is the result of passing *x* as input to prove, with the same public parameters. Otherwise returns *No*.
 
-Read wiki for more information 
+Read wiki for more information
