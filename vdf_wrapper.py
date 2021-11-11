@@ -58,22 +58,7 @@ def verify(pp, x, y, proof) -> bool:
 
 
 if __name__ == "__main__":
-    # pp = setup(1024, 10000000)
-    # x = b"\x08" + (b"\x00" * 99)
-    # y, proof = eval(pp, x)
-    # assert verify(pp, x, y, proof)
     pp = setup(1024, 10000000)
     x = b"\x08" + (b"\x00" * 99)
-    for _ in range(20):
-        print("--------------------")
-        t0 = perf_counter()
-        y, proof = eval(pp, x)
-        t1 = perf_counter()
-        print(f'Eval Time: {t1-t0}')
-        t2 = perf_counter()
-        v = verify(pp, x, y, proof)
-        t3 = perf_counter()
-        print(f'Verify Time: {t1-t0}')
-        assert v
-        print(f'Sleeping...')
-        sleep(5)
+    y, proof = eval(pp, x)
+    assert verify(pp, x, y, proof)
