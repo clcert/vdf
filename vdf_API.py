@@ -22,7 +22,7 @@ FORM_SIZE = 100 # Could be an input
 def create():
 
     try:
-        discriminant_size = int(request.form['discriminant_size'])
+        discriminant_size = int(request.json['discriminant_size'])
         discriminant = create_discriminant(
             CHALLENGE,
             discriminant_size
@@ -37,9 +37,9 @@ def create():
 @cross_origin()
 def eval():
     try:
-        x = int(request.form['input']).to_bytes(FORM_SIZE, 'big')
-        T = int(request.form['iterations'])
-        discriminant_size = int(request.form['discriminant_size'])
+        x = int(request.json['input']).to_bytes(FORM_SIZE, 'big')
+        T = int(request.json['iterations'])
+        discriminant_size = int(request.json['discriminant_size'])
 
         result  = prove(CHALLENGE, x, discriminant_size, T)
         y       = int.from_bytes(result[:FORM_SIZE], 'big')
@@ -56,11 +56,11 @@ def eval():
 @cross_origin()
 def verify():
     try:
-        D   = str(request.form['discriminant'])
-        x   = int(request.form['input']).to_bytes(FORM_SIZE, 'big')
-        y   = int(request.form['output']).to_bytes(FORM_SIZE, 'big')
-        pi  = int(request.form['proof']).to_bytes(FORM_SIZE, 'big')
-        T   = int(request.form['iterations'])
+        D   = str(request.json['discriminant'])
+        x   = int(request.json['input']).to_bytes(FORM_SIZE, 'big')
+        y   = int(request.json['output']).to_bytes(FORM_SIZE, 'big')
+        pi  = int(request.json['proof']).to_bytes(FORM_SIZE, 'big')
+        T   = int(request.json['iterations'])
 
         is_valid = verify_wesolowski(D, x, y, pi, T)
 
