@@ -27,7 +27,7 @@ def create():
             CHALLENGE,
             discriminant_size
         )
-        return {'Discriminant': discriminant}
+        return {'discriminant': discriminant}
 
     except Exception as error:
         return {'Error': str(error)}
@@ -36,6 +36,7 @@ def create():
 @app.route('/eval', methods=['GET','POST'])
 @cross_origin()
 def eval():
+    
     try:
         x = int(request.json['input']).to_bytes(FORM_SIZE, 'big')
         T = int(request.json['iterations'])
