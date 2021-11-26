@@ -38,7 +38,8 @@ def create():
 def eval():
     
     try:
-        x = int(request.json['input']).to_bytes(FORM_SIZE, 'big')
+        # Apparently the first \x08 is necessary
+        x = b"\x08" + int(request.json['input']).to_bytes(FORM_SIZE - 1, 'big')
         T = int(request.json['iterations'])
         discriminant_size = int(request.json['discriminant_size'])
 
@@ -46,7 +47,7 @@ def eval():
         y       = int.from_bytes(result[:FORM_SIZE], 'big')
         proof   = int.from_bytes(result[FORM_SIZE : 2 * FORM_SIZE], 'big')
 
-        return {'output': y, 'proof': proof}
+        return {'output': str(y), 'proof': str(proof)}
 
     except Exception as error:
         print(format_exc())
@@ -58,14 +59,14 @@ def eval():
 def verify():
     try:
         D   = str(request.json['discriminant'])
-        x   = int(request.json['input']).to_bytes(FORM_SIZE, 'big')
+        x   = b"\x08" + int(request.json['input']).to_bytes(FORM_SIZE-1, 'big')
         y   = int(request.json['output']).to_bytes(FORM_SIZE, 'big')
         pi  = int(request.json['proof']).to_bytes(FORM_SIZE, 'big')
         T   = int(request.json['iterations'])
 
         is_valid = verify_wesolowski(D, x, y, pi, T)
 
-        return {'Valid': is_valid}
+        return {'valid': is_valid}
 
     except Exception as error:
         print(format_exc())
