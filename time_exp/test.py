@@ -19,7 +19,7 @@ def testVDF(lbda, T):
 
 if __name__ == '__main__':
 
-    csvfile = open('results/exec_time.csv', 'w', newline='')
+    csvfile = open('../results/exec_time.csv', 'w', newline='')
     writer = csv.writer(csvfile, delimiter='\t', quotechar='|', quoting=csv.QUOTE_MINIMAL)
     
     for lbda in [256, 512, 1024]:
