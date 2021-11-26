@@ -25,7 +25,7 @@ type verifyResponse struct {
 }
 
 func main() {
-	x := 50
+	x := strconv.Itoa(50)
 	lbda := 1024
 	T := 1000000
 
@@ -65,10 +65,10 @@ func createDiscriminant(discriminantSize int) string {
 	return s.Discriminant
 }
 
-func prove(x, T, discriminantSize int) (string, string) {
+func prove(x string, T, discriminantSize int) (string, string) {
 
 	postBody, _ := json.Marshal(map[string]string{
-		"input":             strconv.Itoa(x),
+		"input":             x,
 		"iterations":        strconv.Itoa(T),
 		"discriminant_size": strconv.Itoa(discriminantSize),
 	})
@@ -98,11 +98,11 @@ func prove(x, T, discriminantSize int) (string, string) {
 
 // Y and Pi should be Integers
 // but the numbers are too big.
-func verify(d string, x int, y, pi string, T int) bool {
+func verify(d, x, y, pi string, T int) bool {
 
 	postBody, _ := json.Marshal(map[string]string{
 		"discriminant": d,
-		"input":        strconv.Itoa(x),
+		"input":        x,
 		"output":       y,
 		"proof":        pi,
 		"iterations":   strconv.Itoa(T),
