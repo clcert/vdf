@@ -13,24 +13,7 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-CHALLENGE = token_bytes(10)
 FORM_SIZE = 100 # Could be an input
-
-
-@app.route('/create', methods=['POST','GET'])
-@cross_origin()
-def create():
-
-    try:
-        discriminant_size = int(request.json['discriminant_size'])
-        discriminant = create_discriminant(
-            CHALLENGE,
-            discriminant_size
-        )
-        return {'discriminant': discriminant}
-
-    except Exception as error:
-        return {'Error': str(error)}
 
 
 @app.route('/eval', methods=['GET','POST'])
@@ -41,13 +24,14 @@ def eval():
         # Apparently the first \x08 is necessary
         x = b"\x08" + int(request.json['input']).to_bytes(FORM_SIZE - 1, 'big')
         T = int(request.json['iterations'])
-        discriminant_size = int(request.json['discriminant_size'])
+        λ = int(request.json['discriminant_size'])
+        seed = bytes.fromhex(request.json['seed'])
 
-        result  = prove(CHALLENGE, x, discriminant_size, T)
+        result  = prove(seed, x, λ, T)
         y       = int.from_bytes(result[:FORM_SIZE], 'big')
         proof   = int.from_bytes(result[FORM_SIZE : 2 * FORM_SIZE], 'big')
 
-        return {'output': str(y), 'proof': str(proof)}
+        return {'output': y, 'proof': proof}
 
     except Exception as error:
         print(format_exc())
@@ -58,18 +42,40 @@ def eval():
 @cross_origin()
 def verify():
     try:
-        D   = str(request.json['discriminant'])
+        λ   = int(request.json['discriminant_size'])
         x   = b"\x08" + int(request.json['input']).to_bytes(FORM_SIZE-1, 'big')
         y   = int(request.json['output']).to_bytes(FORM_SIZE, 'big')
         pi  = int(request.json['proof']).to_bytes(FORM_SIZE, 'big')
         T   = int(request.json['iterations'])
+        seed = bytes.fromhex(request.json['seed'])
 
-        is_valid = verify_wesolowski(D, x, y, pi, T)
+        d = create_discriminant(
+            seed, λ
+        )
+
+        is_valid = verify_wesolowski(str(d), x, y, pi, T)
 
         return {'valid': is_valid}
 
     except Exception as error:
         print(format_exc())
+        return {'Error': str(error)}
+
+
+# @app.route('/create', methods=['POST','GET'])
+# @cross_origin()
+def __create():
+
+    try:
+        discriminant_size = int(request.json['discriminant_size'])
+        seed = bytearray.fromhex(request.json['seed'])
+        discriminant = create_discriminant(
+            seed,
+            discriminant_size
+        )
+        return {'discriminant': discriminant}
+
+    except Exception as error:
         return {'Error': str(error)}
     
 
