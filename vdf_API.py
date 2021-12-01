@@ -24,10 +24,10 @@ def eval():
         # Apparently the first \x08 is necessary
         x = b"\x08" + int(request.json['input']).to_bytes(FORM_SIZE - 1, 'big')
         T = int(request.json['iterations'])
-        λ = int(request.json['discriminant_size'])
+        ds = int(request.json['discriminant_size'])
         seed = bytes.fromhex(request.json['seed'])
 
-        result  = prove(seed, x, λ, T)
+        result  = prove(seed, x, ds, T)
         y       = int.from_bytes(result[:FORM_SIZE], 'big')
         proof   = int.from_bytes(result[FORM_SIZE : 2 * FORM_SIZE], 'big')
 
@@ -42,7 +42,7 @@ def eval():
 @cross_origin()
 def verify():
     try:
-        λ   = int(request.json['discriminant_size'])
+        ds   = int(request.json['discriminant_size'])
         x   = b"\x08" + int(request.json['input']).to_bytes(FORM_SIZE-1, 'big')
         y   = int(request.json['output']).to_bytes(FORM_SIZE, 'big')
         pi  = int(request.json['proof']).to_bytes(FORM_SIZE, 'big')
@@ -50,7 +50,7 @@ def verify():
         seed = bytes.fromhex(request.json['seed'])
 
         d = create_discriminant(
-            seed, λ
+            seed, ds
         )
 
         is_valid = verify_wesolowski(str(d), x, y, pi, T)
