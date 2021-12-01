@@ -26,13 +26,13 @@ type verifyResponse struct {
 	IsValid bool `json:"valid"`
 }
 
-func getRandomSeed() []byte {
+func GetRandomSeed() []byte {
 	seed := make([]byte, 16)
 	rand.Read(seed)
 	return seed
 }
 
-func setServer(newServer string) {
+func SetServer(newServer string) {
 	server = newServer
 }
 
@@ -46,7 +46,7 @@ func setServer(newServer string) {
 	returns:
 		(result, proof)
 */
-func eval(x big.Int, T, ds int, seed []byte) (big.Int, big.Int) {
+func Eval(x big.Int, T, ds int, seed []byte) (big.Int, big.Int) {
 
 	postBody, _ := json.Marshal(map[string]string{
 		"seed":              hex.EncodeToString(seed),
@@ -89,7 +89,7 @@ func eval(x big.Int, T, ds int, seed []byte) (big.Int, big.Int) {
 		seed: set randomness on discriminant creation
 	returns if verification was correct
 */
-func verify(x, y, pi big.Int, T, ds int, seed []byte) bool {
+func Verify(x, y, pi big.Int, T, ds int, seed []byte) bool {
 
 	postBody, _ := json.Marshal(map[string]string{
 		"seed":              hex.EncodeToString(seed),
