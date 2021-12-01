@@ -1,10 +1,9 @@
-package main
+package govdf
 
 import (
 	"bytes"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"log"
 	"math/big"
 	"math/rand"
@@ -12,7 +11,7 @@ import (
 	"strconv"
 )
 
-var server = "http://127.0.0.1:5000"
+var server = ""
 
 type discrResponse struct {
 	Discriminant string `json:"discriminant"`
@@ -27,32 +26,26 @@ type verifyResponse struct {
 	IsValid bool `json:"valid"`
 }
 
-func main() {
-	x := big.NewInt(50)
-	seed := getRandomSeed()
-
-	lbda := 1024
-	T := 1000000
-
-	y, proof := eval(*x, T, lbda, seed)
-	isV := verify(*x, y, proof, T, lbda, seed)
-
-	fmt.Println("Pass:", isV)
-}
-
 func getRandomSeed() []byte {
 	seed := make([]byte, 16)
 	rand.Read(seed)
 	return seed
 }
 
-// -- Eval function
-// receives:
-// 	x: input of VDF
-//  T: number of iterations (squarings)
-//  ds: discriminant size
-//  seed: set randomness on discriminant creation
-// returns both (result, proof)
+func setServer(newServer string) {
+	server = newServer
+}
+
+/*
+	EVAL function
+	receives:
+		x: input of VDF
+		T: number of iterations (squarings)
+		ds: discriminant size
+		seed: set randomness on discriminant creation
+	returns:
+		(result, proof)
+*/
 func eval(x big.Int, T, ds int, seed []byte) (big.Int, big.Int) {
 
 	postBody, _ := json.Marshal(map[string]string{
@@ -85,15 +78,17 @@ func eval(x big.Int, T, ds int, seed []byte) (big.Int, big.Int) {
 	return s.Y, s.Proof
 }
 
-// -- Verify function
-// receives:
-// 	x: input of VDF
-//  y: result of VDF
-//  pi: the proof of VDF result
-//  T: number of iterations (squarings)
-//  ds: discriminant size
-//  seed: set randomness on discriminant creation
-// returns if verification was correct
+/*
+	VERIFY function
+	receives:
+		x: input of VDF
+		y: result of VDF
+		pi: the proof of VDF result
+		T: number of iterations (squarings)
+		ds: discriminant size
+		seed: set randomness on discriminant creation
+	returns if verification was correct
+*/
 func verify(x, y, pi big.Int, T, ds int, seed []byte) bool {
 
 	postBody, _ := json.Marshal(map[string]string{
