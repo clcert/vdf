@@ -1,7 +1,6 @@
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from traceback import format_exc
-from secrets import token_bytes
 from chiavdf import (
     create_discriminant,
     prove,
@@ -69,19 +68,19 @@ def verify():
 
 # @app.route('/create', methods=['POST','GET'])
 # @cross_origin()
-def __create():
+# def __create():
 
-    try:
-        discriminant_size = int(request.json['discriminant_size'])
-        seed = bytearray.fromhex(request.json['seed'])
-        discriminant = create_discriminant(
-            seed,
-            discriminant_size
-        )
-        return {'discriminant': discriminant}
+#     try:
+#         discriminant_size = int(request.json['discriminant_size'])
+#         seed = bytearray.fromhex(request.json['seed'])
+#         discriminant = create_discriminant(
+#             seed,
+#             discriminant_size
+#         )
+#         return {'discriminant': discriminant}
 
-    except Exception as error:
-        return {'Error': str(error)}
+#     except Exception as error:
+#         return {'Error': str(error)}
     
 
 if __name__ == '__main__':
