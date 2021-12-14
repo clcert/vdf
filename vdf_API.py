@@ -13,23 +13,30 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-FORM_SIZE = 100 # Could be an input
+# For det_size = 1024, form_size must be 100
+# Specified on implementation of ChiaVDF
+FORM_SIZE = 100
+
+def get_serialized_input(x_hex: str) -> bytes:
+    x_int = int(x_hex, 16)
+    # The first \x08 is a standard for binary quadratic forms
+    x = b"\x08" + x_int.to_bytes(FORM_SIZE - 1, 'big')
+    return x
 
 
-@app.route('/eval', methods=['GET','POST'])
+@app.route('/eval', methods=['POST'])
 @cross_origin()
 def eval():
     
     try:
-        # Apparently the first \x08 is necessary
-        x = b"\x08" + int(request.json['input']).to_bytes(FORM_SIZE - 1, 'big')
-        T = int(request.json['iterations'])
-        ds = int(request.json['discriminant_size'])
+        x    = get_serialized_input(request.json['input'])
+        T    = int(request.json['iterations'])
+        ds   = int(request.json['discriminant_size'])
         seed = bytes.fromhex(request.json['seed'])
 
         result  = prove(seed, x, ds, T)
-        y       = int.from_bytes(result[:FORM_SIZE], 'big')
-        proof   = int.from_bytes(result[FORM_SIZE : 2 * FORM_SIZE], 'big')
+        y       = result[:FORM_SIZE].hex()
+        proof   = result[FORM_SIZE : 2 * FORM_SIZE].hex()
 
         return {'output': y, 'proof': proof}
 
@@ -38,20 +45,18 @@ def eval():
         return {'Error': str(error)}
 
 
-@app.route('/verify', methods=['GET','POST'])
+@app.route('/verify', methods=['POST'])
 @cross_origin()
 def verify():
     try:
         ds   = int(request.json['discriminant_size'])
-        x   = b"\x08" + int(request.json['input']).to_bytes(FORM_SIZE-1, 'big')
-        y   = int(request.json['output']).to_bytes(FORM_SIZE, 'big')
-        pi  = int(request.json['proof']).to_bytes(FORM_SIZE, 'big')
-        T   = int(request.json['iterations'])
+        T    = int(request.json['iterations'])
+        x    = get_serialized_input(request.json['input'])
+        y    = bytes.fromhex(request.json['output'])
+        pi   = bytes.fromhex(request.json['proof'])
         seed = bytes.fromhex(request.json['seed'])
 
-        d = create_discriminant(
-            seed, ds
-        )
+        d = create_discriminant(seed, ds)
 
         is_valid = verify_wesolowski(str(d), x, y, pi, T)
 

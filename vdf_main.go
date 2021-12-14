@@ -1,22 +1,27 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
-	"math/big"
 
 	"github.com/clcert/vdf/govdf"
 )
 
 func main() {
-	x := big.NewInt(50)
+	s := "23"
+	x, err := hex.DecodeString(s)
+	if err != nil {
+		panic(err)
+	}
+
 	seed := govdf.GetRandomSeed()
 	govdf.SetServer("http://127.0.0.1:5000/")
 
 	lbda := 1024
 	T := 1000000
 
-	y, proof := govdf.Eval(*x, T, lbda, seed)
-	isV := govdf.Verify(*x, y, proof, T, lbda, seed)
+	y, proof := govdf.Eval(T, lbda, x, seed)
+	isV := govdf.Verify(x, y, proof, seed, T, lbda)
 
 	fmt.Println("Pass:", isV)
 }
